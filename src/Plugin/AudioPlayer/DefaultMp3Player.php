@@ -9,11 +9,13 @@ namespace Drupal\audiofield\Plugin\AudioPlayer;
 
 use Drupal\audiofield\AudioFieldPluginInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 
 /**
  * @AudioPlayer (
  *   id = "default_mp3_player",
- *   title = @Translation("Default mp3 player"),
+ *   title = @Translation("HTML5 mp3 player"),
  *   file_types = {
  *     "mp3",
  *   },
@@ -25,12 +27,13 @@ class DefaultMp3Player implements AudioFieldPluginInterface {
     /**
      * {@inheritdoc}
      */
-    public function renderPlayer(array $player_data) {
-        $audio_file = $player_data['file'];
+    public function renderPlayer(FileInterface $file) {
+        $file_uri = $file->getFileUri();
+        $url = Url::fromUri(file_create_url($file_uri));
         $markup = "<audio controls>
-                   <source src='" . $audio_file . "' type='audio/mpeg'>
+                   <source src='" . $url->toString() . "' type='audio/mpeg'>
                    Your browser does not support the audio element.
                    </audio>";
-        return Markup::create($markup);
+        return ['#markup' => Markup::create($markup)];
     }
 }

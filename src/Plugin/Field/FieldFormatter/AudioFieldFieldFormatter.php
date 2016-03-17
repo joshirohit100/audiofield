@@ -11,7 +11,6 @@ use Drupal\audiofield\AudioFieldPlayerManager;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @FieldFormatter(
  *   id = "audiofield_audioplayer",
- *   label = @Translation("File with audio player"),
+ *   label = @Translation("Audio Player"),
  *   field_types = {
  *     "file"
  *   }
@@ -97,11 +96,7 @@ class AudioFieldFieldFormatter extends FileFormatterBase implements ContainerFac
     $player = $this->audioPlayerManager->createInstance($plugin_id);
 
     foreach ($files as $delta => $file) {
-      $file_uri = $file->getFileUri();
-      $url = Url::fromUri(file_create_url($file_uri));
-      $elements[$delta] = array(
-        '#markup' => $player->renderPlayer(array('file' => $url->toString())),
-      );
+      $elements[$delta] = $player->renderPlayer($file);
     }
 
     return $elements;

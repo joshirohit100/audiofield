@@ -7,10 +7,18 @@
 
 namespace Drupal\audiofield;
 
+use Drupal\file\FileInterface;
+
 interface AudioFieldPluginInterface {
 
     /**
-     * Renders the player. 
+     * Renders the player.
+     *
+     * @param \Drupal\file\FileInterface $file
+     *   The uploaded file.
+     *
+     * @return []
+     *   Returns the rendered array.
      */
-    public function renderPlayer(array $player_data);
+    public function renderPlayer(FileInterface $file);
 }
